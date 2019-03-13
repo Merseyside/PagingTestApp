@@ -1,4 +1,4 @@
-package com.merseyside.pagingtestapp
+package com.merseyside.pagingtestapp.utils
 
 class Utils {
 

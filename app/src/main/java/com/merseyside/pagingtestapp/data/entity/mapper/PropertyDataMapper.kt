@@ -1,16 +1,16 @@
 package com.merseyside.pagingtestapp.data.entity.mapper
 
-import com.merseyside.pagingtestapp.Utils.Companion.decimetresToMetres
+import com.merseyside.pagingtestapp.utils.Utils.Companion.decimetresToMetres
 import com.merseyside.pagingtestapp.domain.Photos
-import com.merseyside.pagingtestapp.domain.Property
+import com.merseyside.pagingtestapp.domain.PropertyModel
 import com.merseyside.propertyapi.entity.response.PropertyResponse
 import javax.inject.Inject
 
 class PropertyDataMapper @Inject constructor(){
 
-    fun transform(propertyResponse : PropertyResponse) : List<Property> {
+    fun transform(propertyResponse : PropertyResponse) : List<PropertyModel> {
 
-        val propertyList = ArrayList<Property>()
+        val propertyList = ArrayList<PropertyModel>()
 
         propertyResponse.propertyList.forEach { point->
 
@@ -32,12 +32,14 @@ class PropertyDataMapper @Inject constructor(){
                 photoList.add(photos)
             }
 
-            val property = Property(
+            val property = PropertyModel(
+                    id = point.id,
                     photoCount = point.photoCount,
                     photoUrls = photoList,
                     price = point.params.price,
                     roomCount = point.params.roomCount,
-                    addresses = "${point.params.addresses[0].streetPoint.name}, ${point.params.addresses[0].houseNumber}",
+                    addresses = "${point.params.addresses?.get(0)?.streetPoint?.name ?: "Без адреса"}," +
+                            " ${point.params.addresses?.get(0)?.houseNumber ?: ""}",
                     totalArea = decimetresToMetres(point.params.totalArea),
                     livingArea = decimetresToMetres(point.params.livingArea),
                     kitchenArea = decimetresToMetres(point.params.kitchenArea),

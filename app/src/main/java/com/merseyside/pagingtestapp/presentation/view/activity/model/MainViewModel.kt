@@ -1,53 +1,49 @@
 package com.merseyside.pagingtestapp.presentation.view.activity.model
 
-import android.util.Log
-import androidx.lifecycle.MutableLiveData
-import com.merseyside.pagingtestapp.domain.Property
-import com.merseyside.pagingtestapp.domain.interactor.GetPropertiesInteractor
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Transformations
+import androidx.paging.LivePagedListBuilder
+import androidx.paging.PagedList
+import com.merseyside.pagingtestapp.domain.PropertyModel
+import com.merseyside.pagingtestapp.domain.repository.datasource.PropertyDataSource
+import com.merseyside.pagingtestapp.domain.repository.datasource.PropertyDataSourceFactory
+import com.merseyside.pagingtestapp.domain.repository.datasource.State
 import com.merseyside.pagingtestapp.presentation.base.BasePropertyViewModel
-import com.upstream.basemvvmimpl.domain.interactor.DefaultSingleObserver
 
-class MainViewModel(private val getPropertiesUseCase: GetPropertiesInteractor) : BasePropertyViewModel() {
+
+class MainViewModel(private val propertyDataSourceFactory: PropertyDataSourceFactory) : BasePropertyViewModel() {
 
     private val TAG = javaClass.simpleName
 
-    private val propertyList = ArrayList<Property>()
+    lateinit var propertyLiveData: LiveData<PagedList<PropertyModel>>
 
-    val propertiesLiveData = MutableLiveData<List<Property>>()
+    override fun clearDisposables() {}
 
-    override fun clearDisposables() {
-        getPropertiesUseCase.clear()
+    override fun dispose() {}
+
+    private fun initPaging(initialKey : Int = 0) {
+
+        val pagedListConfig = PagedList.Config.Builder()
+                .setEnablePlaceholders(false)
+                .setInitialLoadSizeHint(15)
+                .setPageSize(10)
+                .setPrefetchDistance(5)
+                .build()
+
+        propertyLiveData = LivePagedListBuilder<Int, PropertyModel>(propertyDataSourceFactory, pagedListConfig)
+                .build()
     }
 
-    override fun dispose() {
-        getPropertiesUseCase.dispose()
+    fun loadProperties(initialKey : Int = 0) {
+        initPaging(initialKey)
     }
 
-    fun restoreItems() : List<Property> {
-        propertiesLiveData.value = null
-        return propertyList
-    }
+    fun getStateLiveData(): LiveData<State> = Transformations.switchMap<PropertyDataSource,
+            State>(propertyDataSourceFactory.propertyDataSourceLiveData, PropertyDataSource::state)
 
-    fun loadProperties() {
-        getPropertiesUseCase.execute(PropertyObserver(), GetPropertiesInteractor.Params(5, 0))
-    }
-
-    private inner class PropertyObserver : DefaultSingleObserver<List<Property>>() {
-
-        override fun onSuccess(obj: List<Property>) {
-            super.onSuccess(obj)
-
-            propertyList.addAll(obj)
-            propertiesLiveData.value = obj
-
-            Log.d(TAG, "$obj")
-        }
-
-        override fun onError(throwable: Throwable) {
-            super.onError(throwable)
-
-            Log.d(TAG, throwable.message)
-        }
+    override fun onCleared() {
+        super.onCleared()
+        propertyDataSourceFactory.getCompositeDisposables().dispose()
     }
 
 }

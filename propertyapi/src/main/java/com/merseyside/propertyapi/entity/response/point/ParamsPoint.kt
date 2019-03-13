@@ -10,7 +10,7 @@ data class ParamsPoint(
         val roomCount : Int,
 
         @SerializedName("house_addresses")
-        val addresses : List<AddressPoint>,
+        val addresses : List<AddressPoint>?,
 
         @SerializedName("total_area")
         val totalArea : Int,

@@ -1,17 +1,18 @@
 package com.merseyside.pagingtestapp.presentation.view.activity.adapter
 
-import com.merseyside.pagingtestapp.domain.Property
-import com.merseyside.pagingtestapp.presentation.view.activity.model.PropertyItemViewModel
+import com.merseyside.pagingtestapp.R
+import com.merseyside.pagingtestapp.domain.PropertyModel
+import com.upstream.basemvvmimpl.BR
 import com.upstream.basemvvmimpl.presentation.adapter.BasePagedAdapter
 
-class PropertyAdapter : BasePagedAdapter<Property, PropertyItemViewModel>() {
+class PropertyAdapter : BasePagedAdapter<PropertyModel>(PropertyModel.DIFF_CALLBACK) {
 
     override fun getLayoutIdForPosition(position: Int): Int {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return R.layout.view_property_item
     }
 
     override fun getBindingVariable(): Int {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return BR.obj
     }
 
 }
