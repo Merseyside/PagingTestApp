@@ -38,8 +38,8 @@ class PropertyDataMapper @Inject constructor(){
                     photoUrls = photoList,
                     price = point.params.price,
                     roomCount = point.params.roomCount,
-                    addresses = "${point.params.addresses?.get(0)?.streetPoint?.name ?: "Без адреса"}," +
-                            " ${point.params.addresses?.get(0)?.houseNumber ?: ""}",
+                    address = (point.params.addresses?.get(0)?.streetPoint?.name ?: "Без адреса") +
+                            ", ${point.params.addresses?.get(0)?.houseNumber ?: ""}",
                     totalArea = decimetresToMetres(point.params.totalArea),
                     livingArea = decimetresToMetres(point.params.livingArea),
                     kitchenArea = decimetresToMetres(point.params.kitchenArea),

@@ -1,21 +1,26 @@
 package com.merseyside.pagingtestapp.domain
 
+import android.os.Parcel
+import android.os.Parcelable
+import android.util.Log
 import androidx.annotation.NonNull
 import androidx.recyclerview.widget.DiffUtil
 
-data class PropertyModel(
+data class PropertyModel (
 
         val id : Long,
         val photoCount : Int,
         val photoUrls : List<Photos>?,
         val price : Int,
         val roomCount : Int,
-        val addresses : String,
+        val address : String,
         val totalArea : Int,
         val livingArea : Int,
         val kitchenArea : Int,
         val floorsCount : Int,
         val floor : Int) {
+
+    private val TAG = javaClass.simpleName
 
     companion object {
 
@@ -43,4 +48,39 @@ data class PropertyModel(
         }
     }
 
+    fun getRoomsWithAddress() : String {
+        return "$roomCount-к, $address"
+    }
+
+    fun getAreas() : String {
+        return "$totalArea / $livingArea / $kitchenArea m2"
+    }
+
+    fun getFloors() : String {
+        return "\u2022 Этаж $floor из $floorsCount"
+    }
+
+    fun getFormattedPrice() : String {
+        var stringPrice = price.toString()
+
+        var result = ""
+
+        while(true) {
+
+            val substring = stringPrice.takeLast(3)
+            stringPrice = stringPrice.removeSuffix(substring)
+
+            result = if (result.isNotEmpty()) {
+                "$substring $result"
+            } else {
+                substring
+            }
+
+            if (substring.length != 3) {
+                break
+            }
+        }
+
+        return "$result \u20BD"
+    }
 }

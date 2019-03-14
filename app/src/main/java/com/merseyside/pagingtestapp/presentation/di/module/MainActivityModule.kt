@@ -4,18 +4,17 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
-import com.merseyside.pagingtestapp.domain.interactor.GetPropertiesInteractor
-import com.merseyside.pagingtestapp.domain.repository.datasource.PropertyDataSourceFactory
-import com.merseyside.pagingtestapp.presentation.view.activity.model.MainViewModel
+import com.merseyside.pagingtestapp.presentation.view.activity.activitymain.model.MainViewModel
 import dagger.Module
 import dagger.Provides
+import ru.terrakok.cicerone.Router
 
 @Module
 class MainActivityModule(private val activity : AppCompatActivity) {
 
     @Provides
-    internal fun mainViewModelProvider(propertyDataSourceFactory: PropertyDataSourceFactory): ViewModelProvider.Factory {
-        return MainViewModelProviderFactory(propertyDataSourceFactory)
+    internal fun mainViewModelProvider(router : Router): ViewModelProvider.Factory {
+        return MainViewModelProviderFactory(router)
     }
 
     @Provides
@@ -24,12 +23,11 @@ class MainActivityModule(private val activity : AppCompatActivity) {
     }
 
     class MainViewModelProviderFactory(
-            private val propertyDataSourceFactory: PropertyDataSourceFactory)
-        : ViewModelProvider.Factory {
+            private val router : Router) : ViewModelProvider.Factory {
 
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             if (modelClass == MainViewModel::class.java) {
-                return MainViewModel(propertyDataSourceFactory) as T
+                return MainViewModel(router) as T
             }
             throw IllegalArgumentException("Unknown class title")
         }

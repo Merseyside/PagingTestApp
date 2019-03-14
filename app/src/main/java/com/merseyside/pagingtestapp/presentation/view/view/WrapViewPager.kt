@@ -1,0 +1,28 @@
+package com.merseyside.pagingtestapp.presentation.view.view
+
+import android.content.Context
+import android.util.AttributeSet
+import android.view.View
+import androidx.viewpager.widget.ViewPager
+
+class WrapViewPager(context: Context, attrsSet : AttributeSet) : ViewPager(context, attrsSet) {
+
+    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+
+        var newHeightMeasureSpec = heightMeasureSpec
+
+        var height = 0
+        for (i in 0 until childCount) {
+            val child = getChildAt(i)
+            child.measure(widthMeasureSpec, View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED))
+            val h = child.measuredHeight
+            if (h > height) height = h
+        }
+
+        if (height != 0) {
+            newHeightMeasureSpec = View.MeasureSpec.makeMeasureSpec(height, View.MeasureSpec.EXACTLY)
+        }
+
+        super.onMeasure(widthMeasureSpec, newHeightMeasureSpec)
+    }
+}

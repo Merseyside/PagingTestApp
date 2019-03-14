@@ -1,7 +1,7 @@
 package com.merseyside.pagingtestapp.presentation.di.component
 
 import com.merseyside.pagingtestapp.presentation.di.module.MainActivityModule
-import com.merseyside.pagingtestapp.presentation.view.activity.view.MainActivity
+import com.merseyside.pagingtestapp.presentation.view.activity.activitymain.view.MainActivity
 import com.upstream.basemvvmimpl.presentation.di.qualifiers.ActivityScope
 import dagger.Component
 

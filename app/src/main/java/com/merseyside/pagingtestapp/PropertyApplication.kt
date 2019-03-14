@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import com.merseyside.pagingtestapp.presentation.di.component.AppComponent
 import com.merseyside.pagingtestapp.presentation.di.component.DaggerAppComponent
 import com.merseyside.pagingtestapp.presentation.di.module.AppModule
+import com.merseyside.pagingtestapp.presentation.di.module.NavigationModule
 
 class PropertyApplication : Application() {
 
@@ -32,6 +33,7 @@ class PropertyApplication : Application() {
     private fun buildComponent() : AppComponent {
         return DaggerAppComponent.builder()
                 .appModule(AppModule(this))
+                .navigationModule(NavigationModule())
                 .build()
     }
 }
